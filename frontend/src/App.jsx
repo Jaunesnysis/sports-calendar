@@ -49,8 +49,50 @@ function EventCard({ event }) {
   );
 }
 
+function Filters({ events, onFilter }) {
+  const [sport, setSport] = useState("");
+  const [date, setDate] = useState("");
+
+  const sports = [...new Set(events.map((e) => e.sport))];
+
+  useEffect(() => {
+    let filtered = events;
+    if (sport) filtered = filtered.filter((e) => e.sport === sport);
+    if (date)
+      filtered = filtered.filter((e) => e.event_datetime.startsWith(date));
+    onFilter(filtered);
+  }, [sport, date, events]);
+
+  return (
+    <div className="filters">
+      <select value={sport} onChange={(e) => setSport(e.target.value)}>
+        <option value="">All sports</option>
+        {sports.map((s) => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
+      </select>
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          setSport("");
+          setDate("");
+        }}
+      >
+        Clear
+      </button>
+    </div>
+  );
+}
+
 function App() {
   const [events, setEvents] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +100,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setEvents(data);
+        setFiltered(data);
         setLoading(false);
       });
   }, []);
@@ -67,11 +110,14 @@ function App() {
       <Navbar />
       <main className="main">
         <h1 className="page-title">Sports Calendar</h1>
+        {!loading && <Filters events={events} onFilter={setFiltered} />}
         {loading ? (
           <p className="loading">Loading events...</p>
+        ) : filtered.length === 0 ? (
+          <p className="loading">No events found.</p>
         ) : (
           <div className="events-grid">
-            {events.map((event) => (
+            {filtered.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>
