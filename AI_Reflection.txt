@@ -1,0 +1,16 @@
+I used Claude (Anthropic) as an assistant throughout this project. A bit of ChatGPT and Gemini as well. No copilot used.
+
+How I used it:
+- To help think through the database schema and normalization decisions
+- To generate code for Express routes and React components
+- To explain concepts I was unsure about (e.g. 3NF)
+- To help debug issues like node_modules being tracked by git
+
+What I did myself:
+- Made all the key design decisions (schema structure, what to include/exclude)
+- Understood and reviewed every piece of code before using it
+- Asked follow-up questions when something wasn't clear
+- Made judgment calls on what to keep, change or remove
+
+I was able to explain every part of the code and the reasoning behind 
+the decisions made throughout the project.
